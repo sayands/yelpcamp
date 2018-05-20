@@ -17,6 +17,18 @@ var campgrounds = [
   {
     name: "Darjeeling",
     image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
+  },
+  {
+    name: "Darjeeling",
+    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
+  },
+  {
+    name: "Darjeeling",
+    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
+  },
+  {
+    name: "Darjeeling",
+    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
   }
 ];
 
