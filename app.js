@@ -1,43 +1,52 @@
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
+var express = require("express"),
+  app = express(),
+  bodyParser = require("body-parser"),
+  mongoose = require("mongoose");
+
+var { credentials } = require("./config");
+var { user, password } = credentials;
+mongoose.connect(
+  `mongodb://${user}:${password}@ds129770.mlab.com:29770/yelpcamp-dev`
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-var campgrounds = [
-  {
-    name: "Darjeeling",
-    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
-  },
-  {
-    name: "Darjeeling",
-    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
-  },
-  {
-    name: "Darjeeling",
-    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
-  },
-  {
-    name: "Darjeeling",
-    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
-  },
-  {
-    name: "Darjeeling",
-    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
-  },
-  {
-    name: "Darjeeling",
-    image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
-  }
-];
+//SCHEMA SETUP
+var campgroundSchema = new mongoose.Schema({
+  name: String,
+  image: String
+});
+
+var Campground = mongoose.model("Campground", campgroundSchema);
+
+// Campground.create(
+//   {
+//     name: "Darjeeling",
+//     image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg"
+//   },
+//   function(err, campground) {
+//     if (err) console.log(err);
+//     else {
+//       console.log("Newly Created Campground");
+//       console.log(campground);
+//     }
+//   }
+// );
 
 app.get("/", function(req, res) {
   res.render("landing");
 });
 
 app.get("/campgrounds", function(req, res) {
-  res.render("campgrounds", { campgrounds });
+  //Get all campgrounds from DB
+  Campground.find({}, function(err, allCampgrounds) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("campgrounds", { campgrounds: allCampgrounds });
+    }
+  });
 });
 
 app.post("/campgrounds", function(req, res) {
@@ -45,10 +54,15 @@ app.post("/campgrounds", function(req, res) {
   var { name, image } = req.body;
 
   var newCampground = { name, image };
-  campgrounds.push(newCampground);
-
-  //redirect back to campgrounds page
-  res.redirect("/campgrounds");
+  //Create a new campground and save to DB
+  Campground.create(newCampground, function(err, newlyCreated) {
+    if (err) {
+      console.log(err);
+    } else {
+      //redirect back to campgrounds page
+      res.redirect("/campgrounds");
+    }
+  });
 });
 
 app.get("/campgrounds/new", function(req, res) {
