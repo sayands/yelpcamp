@@ -3,8 +3,9 @@ var express = require("express"),
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   Campground = require("./models/campground"),
-  Comment = require("./models/comment"),
-  User = require("./models/user");
+  seedDB = require("./seeds");
+
+seedDB();
 
 var { credentials } = require("./config");
 var { user, password } = credentials;
