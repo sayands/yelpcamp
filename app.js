@@ -5,7 +5,7 @@ var express = require("express"),
   Campground = require("./models/campground"),
   seedDB = require("./seeds");
 
-seedDB();
+//seedDB();
 
 var { credentials } = require("./config");
 var { user, password } = credentials;
@@ -15,21 +15,6 @@ mongoose.connect(
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
-
-// Campground.create(
-//   {
-//     name: "Darjeeling",
-//     image: "http://outgotrip.com/wp-content/uploads/2017/08/DARJEELING.jpg",
-//     description: "This is a very nice place."
-//   },
-//   function(err, campground) {
-//     if (err) console.log(err);
-//     else {
-//       console.log("Newly Created Campground");
-//       console.log(campground);
-//     }
-//   }
-// );
 
 app.get("/", function(req, res) {
   res.render("landing");
@@ -72,14 +57,17 @@ app.get("/campgrounds/new", function(req, res) {
 //SHOW - shows more info about one campground
 app.get("/campgrounds/:id", function(req, res) {
   //find the campground with provided id
-  Campground.findById(req.params.id, function(err, foundCampground) {
-    if (err) {
-      console.log(err);
-    } else {
-      //render show template with that campground
-      res.render("show", { campground: foundCampground });
-    }
-  });
+  Campground.findById(req.params.id)
+    .populate("comments")
+    .exec(function(err, foundCampground) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(foundCampground);
+        //render show template with that campground
+        res.render("show", { campground: foundCampground });
+      }
+    });
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP, function() {
