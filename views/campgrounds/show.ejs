@@ -31,7 +31,7 @@
                                 <%= moment(campground.createdAt).fromNow() %>
                         </em>
                     </p>
-                    <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
+                    <% if(currentUser && campground.author.id.equals(currentUser._id) || (currentUser && currentUser.isAdmin)){ %>
                         <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
                         <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST" class="delete-form">
                             <button class="btn btn-danger">Delete</button>
@@ -119,7 +119,7 @@
                                         <%= comment.text %>
                                     </p>
                                     <!--If the visitor is logged in and the owner of the comment, show the edit and delete buttons-->
-                                    <% if (currentUser && currentUser._id.equals(comment.author.id)) { %>
+                                    <% if (currentUser && currentUser._id.equals(comment.author.id) || (currentUser && currentUser.isAdmin)){ %>
                                         <!--Edit button used for collapsing the edit comment form-->
                                         <a class="btn btn-xs btn-warning" role="button" data-toggle="collapse" href="#collapseEdit<%= comment._id %>" aria-expanded="false"
                                             aria-controls="collapse<%= comment._id %>">
@@ -188,5 +188,5 @@
             });
         }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBqismYYHLGWwLQHH_lZqxJ3XCLrr3ZGd0&callback=initMap"></script>ript>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1E37731r0hQoMPqJwugjV62QWmYQf9K8&callback=initMap"></script>
     <% include ../partials/footer %>
