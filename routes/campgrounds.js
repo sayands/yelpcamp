@@ -86,42 +86,46 @@ router.post("/", isLoggedIn, upload.single("image"), function(req, res) {
     var lat = data[0].latitude;
     var lng = data[0].longitude;
     var location = data[0].formattedAddress;
-    var newCampground = {
-      name: name,
-      image: image,
-      description: desc,
-      author: author,
-      location: location,
-      lat: lat,
-      lng: lng
-    };
+
     // image upload
     cloudinary.uploader.upload(req.file.path, function(result) {
       // add cloudinary url for the image to the campground object under image property
-      req.body.campground.image = result.secure_url;
+      //req.body.campground.image = result.secure_url;
       // add author to campground
       req.body.campground.author = {
         id: req.user._id,
         username: req.user.username
       };
-      Campground.create(req.body.campground, function(err, campground) {
-        if (err) {
-          req.flash("error", err.message);
-          return res.redirect("back");
-        }
-        res.redirect("/campgrounds/" + campground.id);
-      });
-    });
 
-    // Create a new campground and save to DB
-    Campground.create(newCampground, function(err, newlyCreated) {
-      if (err) {
-        console.log(err);
-      } else {
-        //redirect back to campgrounds page
-        console.log(newlyCreated);
-        res.redirect("/campgrounds");
-      }
+      var newCampground = {
+        name: name,
+        image: result.secure_url,
+        description: desc,
+        author: author,
+        location: location,
+        lat: lat,
+        lng: lng
+      };
+
+      //   Campground.create(req.body.campground, function(err, campground) {
+      //     if (err) {
+      //       req.flash("error", err.message);
+      //       return res.redirect("back");
+      //     }
+      //     res.redirect("/campgrounds/" + campground.id);
+      //   });
+      // });
+
+      // Create a new campground and save to DB
+      Campground.create(newCampground, function(err, newlyCreated) {
+        if (err) {
+          console.log(err);
+        } else {
+          //redirect back to campgrounds page
+          console.log(newlyCreated);
+          res.redirect("/campgrounds/" + newlyCreated.id);
+        }
+      });
     });
   });
 });
