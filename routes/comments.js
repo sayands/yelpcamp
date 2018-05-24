@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router({ mergeParams: true });
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
+var { checkCommentOwnership, isLoggedIn } = require("../middleware");
 
 // =====================================================
 // COMMENTS ROUTES
@@ -87,35 +88,5 @@ router.delete("/:comment_id", checkCommentOwnership, function(req, res) {
     }
   });
 });
-
-// =====================
-// Middleware
-// =====================
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
-
-// check comment ownership
-function checkCommentOwnership(req, res, next) {
-  if (req.isAuthenticated()) {
-    Comment.findById(req.params.comment_id, function(err, foundComment) {
-      if (err) {
-        res.redirect("back");
-      } else {
-        if (foundComment.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back");
-        }
-      }
-    });
-  } else {
-    //console.log("You need to be logged in to do that");
-    res.redirect("back");
-  }
-}
 
 module.exports = router;

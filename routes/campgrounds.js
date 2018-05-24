@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
-
+var { checkCampgroundOwnership, isLoggedIn } = require("../middleware");
 // =========================
 //  CAMPGROUND ROUTES
 // =========================
@@ -96,36 +96,5 @@ router.delete("/:id", checkCampgroundOwnership, function(req, res) {
     }
   });
 });
-
-//middleware
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect("/login");
-}
-
-// check  campground ownership
-function checkCampgroundOwnership(req, res, next) {
-  if (req.isAuthenticated()) {
-    Campground.findById(req.params.id, function(err, foundCampground) {
-      if (err) {
-        res.redirect("/campgrounds");
-      } else {
-        //if logged in does user own campground?
-        //console.log(foundCampground.author.id);
-        //console.log(req.user._id);
-        if (foundCampground.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back");
-        }
-      }
-    });
-  } else {
-    //console.log("You need to be logged in to do that");
-    res.redirect("back");
-  }
-}
 
 module.exports = router;
