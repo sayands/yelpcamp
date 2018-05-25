@@ -21,12 +21,7 @@ var commentRoutes = require("./routes/comments"),
 // =======================
 // APP CONFIGURATION
 // =======================
-
-var { credentials } = require("./config");
-var { user, password } = credentials;
-mongoose.connect(
-  `mongodb://${user}:${password}@ds129770.mlab.com:29770/yelpcamp-dev`
-);
+mongoose.connect(process.env.DATABASEURL);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
