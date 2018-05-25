@@ -39,6 +39,27 @@ router.post("/register", function(req, res) {
       console.log(err);
       return res.render("register", { error: err.message });
     }
+    var smtpTransport = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: "sayands1997123@gmail.com",
+        pass: process.env.GMAILPW
+      }
+    });
+    var mailOptions = {
+      to: user.email,
+      from: "sayands1997123@mail.com",
+      subject: "WELCOME TO YELPCAMP",
+      text:
+        "Hello,\n\n" +
+        "This is a confirmation that your account associated with " +
+        newUser.email +
+        " has been registered for yelpcamp.\n"
+    };
+    smtpTransport.sendMail(mailOptions, function(err) {
+      req.flash("success", "Success! Your password has been changed.");
+      done(err);
+    });
     passport.authenticate("local")(req, res, function() {
       req.flash(
         "success",
