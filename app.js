@@ -21,8 +21,9 @@ var commentRoutes = require("./routes/comments"),
 // =======================
 // APP CONFIGURATION
 // =======================
-mongoose.connect(process.env.DATABASEURL);
-
+if (process.env.NODE_ENV === "production")
+  mongoose.connect(process.env.DATABASEPRODURL);
+else mongoose.connect(process.env.DATABASEDEVURL);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
