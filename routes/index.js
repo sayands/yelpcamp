@@ -57,7 +57,7 @@ router.post("/register", function(req, res) {
         " has been registered for yelpcamp.\n"
     };
     smtpTransport.sendMail(mailOptions, function(err) {
-      req.flash("success", "Success! Your password has been changed.");
+      //req.flash("success", "Success! Your password has been changed.");
       done(err);
     });
     passport.authenticate("local")(req, res, function() {

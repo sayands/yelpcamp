@@ -103,6 +103,7 @@ router.post("/", isLoggedIn, upload.single("image"), function(req, res) {
   // get data from form and add to campgrounds array
   var name = req.body.name;
   var desc = req.body.description;
+  var price = req.body.price;
   var author = {
     id: req.user._id,
     username: req.user.username
@@ -133,7 +134,8 @@ router.post("/", isLoggedIn, upload.single("image"), function(req, res) {
         author: author,
         location: location,
         lat: lat,
-        lng: lng
+        lng: lng,
+        price: price
       };
 
       //   Campground.create(req.body.campground, function(err, campground) {
