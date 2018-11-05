@@ -12,24 +12,24 @@
 
     <div class="container">
         <% if(error && error.length > 0){ %>
-            <div class="alert alert-danger" role="alert">
-                <%= error %>
-            </div>
-            <% } %>
-                <% if(success && success.length > 0){ %>
-                    <div class="alert alert-success" role="alert">
-                        <%= success %>
-                    </div>
-                    <% } %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+        <% } %>
+        <% if(success && success.length > 0){ %>
+        <div class="alert alert-success" role="alert">
+            <%= success %>
+        </div>
+        <% } %>
     </div>
 
     <div id="landing-header">
         <h1>Welcome to CampSite!</h1>
-        <a href="/campgrounds" class="btn btn-lg btn-success">View All Campgrounds</a>
+        <a href="/campgrounds" class="btn btn-lg btn-success">View All CampSites</a>
         <p>
             <form action="/campgrounds" method="GET" class="form-inline">
                 <div class="form-group">
-                    <input type="text" name="search" placeholder="Campground search..." class="form-control">
+                    <input type="text" name="search" placeholder="Campsite search..." class="form-control">
                     <input type="submit" value="search" class="btn btn-default">
                 </div>
             </form>
